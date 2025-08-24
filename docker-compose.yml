@@ -1,0 +1,24 @@
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: new_ads_db
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    ports:
+      - '8000:8000'
+    environment:
+      DATABASE_URL: postgresql+asyncpg://username:password@postgres:5432/new_ads_db
+    depends_on:
+      - postgres
+
+
+volumes:
+  postgres_data:
